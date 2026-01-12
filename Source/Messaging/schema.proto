@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package Fossa.Messaging;
+
+option csharp_namespace = "Fossa.Messaging";
+
+message CompanyChanged {
+  int64  CompanyId    = 1;
+  string Name         = 2;
+  string CountryCodes = 3;
+}
+
+message CompanyDeleted {
+  int64 CompanyId = 1;
+}
+
+message Address {
+  string City        = 1;
+  string CountryCode = 2;
+  string Line1       = 3;
+  string Line2       = 4;
+  string PostalCode  = 5;
+  string Subdivision = 6;
+}
+
+message BranchChanged {
+  int64   BranchId   = 1;
+  int64   CompanyId  = 2;
+  string  Name       = 3;
+  Address Address    = 4;
+  string  TimeZoneId = 5;
+}
+
+message BranchDeleted {
+  int64 BranchId = 1;
+}
+
+message EmployeeChanged {
+  int64  EmployeeId           = 1;
+  int64  CompanyId            = 2;
+  string FirstName            = 3;
+  string LastName             = 4;
+  string FullName             = 5;
+  string JobTitle             = 6;
+  int64  AssignedBranchId     = 7;
+  int64  AssignedDepartmentId = 8;
+  int64  ReportsToId          = 9;
+}
+
+message EmployeeDeleted {
+  int64 EmployeeId = 1;
+}
+
+message DepartmentChanged {
+  int64  DepartmentId       = 1;
+  int64  CompanyId          = 2;
+  string Name               = 3;
+  int64  ManagerId          = 4;
+  int64  ParentDepartmentId = 5;
+}
+
+message DepartmentDeleted {
+  int64 DepartmentId = 1;
+}
