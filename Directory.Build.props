@@ -30,4 +30,18 @@
     <PackageReference Include="MinVer" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="LanguageExt" />
+    <Using Include="LanguageExt.Common" />
+    <Using Include="LanguageExt.Prelude">
+      <Static>True</Static>
+    </Using>
+    <Using Include="LanguageExt.Parsec" />
+    <Using Include="LanguageExt.Parsec.Char">
+      <Static>True</Static>
+    </Using>
+    <Using Include="LanguageExt.Parsec.Prim">
+      <Static>True</Static>
+    </Using>
+  </ItemGroup>
 </Project>

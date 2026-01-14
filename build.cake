@@ -57,6 +57,8 @@ Task("Test")
                     NoBuild = true,
                     NoRestore = true,
                     ResultsDirectory = artefactsDirectory,
+                    ArgumentCustomization = args => args
+                        .Append("--settings Tests/.runsettings"),
                 });
         });
 
