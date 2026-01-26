@@ -9,13 +9,18 @@ using Microsoft.Extensions.Options;
 /// <remarks>
 /// Initializes a new instance of the <see cref="ProducerProvider"/> class.
 /// </remarks>
+/// <param name="serviceIdentityProvider">The service identity provider.</param>
 /// <param name="options">The options.</param>
-public class ProducerProvider(IOptions<MessagingOptions> options) : IProducerProvider, IDisposable
+public class ProducerProvider(
+    IServiceIdentityProvider serviceIdentityProvider,
+    IOptions<MessagingOptions> options) : IProducerProvider, IDisposable
 {
     private readonly IOptions<MessagingOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     private readonly Lock producerLock = new();
+    private readonly IServiceIdentityProvider serviceIdentityProvider = serviceIdentityProvider ?? throw new ArgumentNullException(nameof(serviceIdentityProvider));
+
     private bool disposedValue;
-    private IProducer<string?, byte[]>? producer;
+    private volatile IProducer<string?, byte[]>? producer;
 
     /// <inheritdoc/>
     public void Dispose()
@@ -27,13 +32,24 @@ public class ProducerProvider(IOptions<MessagingOptions> options) : IProducerPro
     /// <inheritdoc/>
     public IProducer<string?, byte[]> GetProducer()
     {
+        ObjectDisposedException.ThrowIf(this.disposedValue, this);
+
         if (this.producer == null)
         {
             lock (this.producerLock)
             {
 #pragma warning disable CA1508 // Avoid dead conditional code
-                this.producer ??= new ProducerBuilder<string?, byte[]>(this.options.Value.Actor).Build();
+                if (this.producer == null)
 #pragma warning restore CA1508 // Avoid dead conditional code
+                {
+                    var serviceIdentity = this.serviceIdentityProvider.GetIdentity();
+                    var producerConfig = new ProducerConfig(this.options.Value.Actor)
+                    {
+                        ClientId = serviceIdentity.ToString(),
+                    };
+                    var producerBuilder = new ProducerBuilder<string?, byte[]>(producerConfig);
+                    this.producer = producerBuilder.Build();
+                }
             }
         }
 
@@ -48,6 +64,11 @@ public class ProducerProvider(IOptions<MessagingOptions> options) : IProducerPro
     {
         if (!this.disposedValue)
         {
+            if (disposing)
+            {
+                this.producer?.Dispose();
+            }
+
             this.disposedValue = true;
         }
     }
