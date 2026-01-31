@@ -2,12 +2,11 @@ namespace Fossa.Messaging.Test;
 
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using IdGen.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Time.Testing;
-using NSubstitute;
 using TIKSN.DependencyInjection;
-using TIKSN.Identity;
 using Xunit;
 
 public class ServiceIdentityProviderTests
@@ -50,22 +49,13 @@ public class ServiceIdentityProviderTests
             })
             .Build();
         var services = new ServiceCollection();
-        _ = services.AddMessaging(configuration);
-        _ = services.AddFrameworkCore();
 
+        _ = services.AddMessaging(configuration, "Fossa", Seq("Messaging", "Test"));
+        _ = services.AddFrameworkCore();
+        _ = services.AddIdGen(9);
         var fakeTimeProvider = new FakeTimeProvider(
             new DateTimeOffset(2022, 9, 24, 0, 0, 0, TimeSpan.Zero));
         _ = services.AddSingleton<TimeProvider>(fakeTimeProvider);
-
-        var serviceIdentityProvider = Substitute.For<IServiceIdentityProvider>();
-        _ = serviceIdentityProvider
-            .GetIdentity().Returns(
-                new ServiceIdentity(
-                    applicationName: "Fossa",
-                    componentNames: Seq("Messaging", "Test"),
-                    instanceId: ServiceInstanceId.Create(Ulid.NewUlid())));
-
-        _ = services.AddSingleton(serviceIdentityProvider);
 
         ContainerBuilder containerBuilder = new();
         _ = containerBuilder.RegisterModule<CoreModule>();
