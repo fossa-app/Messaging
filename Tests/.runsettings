@@ -6,9 +6,8 @@
         <Configuration>
           <Format>cobertura</Format>
           <Exclude>
-            [Fossa.Messaging]*Schema*;
-            [Fossa.Messaging]*Changed;
-            [Fossa.Messaging]*Deleted;
+            [Fossa.Messaging.Messages.Events]*Events*;
+            [Fossa.Messaging.Messages.Events]*ProtoEvent*;
             [Fossa.Messaging.Test]*
           </Exclude>
           <ExcludeByAttribute>
@@ -17,7 +16,7 @@
             System.Diagnostics.DebuggerNonUserCodeAttribute
           </ExcludeByAttribute>
           <ExcludeByFile>
-            **/Schema.cs
+            **/Messages/Events.cs
           </ExcludeByFile>
         </Configuration>
       </DataCollector>

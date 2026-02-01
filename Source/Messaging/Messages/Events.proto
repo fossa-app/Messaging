@@ -1,16 +1,16 @@
 syntax = "proto3";
 
-package Fossa.Messaging;
+package Fossa.Messaging.Messages.Events;
 
-option csharp_namespace = "Fossa.Messaging";
+option csharp_namespace = "Fossa.Messaging.Messages.Events";
 
-message CompanyChanged {
+message CompanyChangedProtoEvent {
   int64  CompanyId    = 1;
   string Name         = 2;
   string CountryCodes = 3;
 }
 
-message CompanyDeleted {
+message CompanyDeletedProtoEvent {
   int64 CompanyId = 1;
 }
 
@@ -23,7 +23,7 @@ message Address {
   string Subdivision = 6;
 }
 
-message BranchChanged {
+message BranchChangedProtoEvent {
   int64   BranchId   = 1;
   int64   CompanyId  = 2;
   string  Name       = 3;
@@ -31,11 +31,11 @@ message BranchChanged {
   string  TimeZoneId = 5;
 }
 
-message BranchDeleted {
+message BranchDeletedProtoEvent {
   int64 BranchId = 1;
 }
 
-message EmployeeChanged {
+message EmployeeChangedProtoEvent {
   int64  EmployeeId           = 1;
   int64  CompanyId            = 2;
   string FirstName            = 3;
@@ -47,11 +47,11 @@ message EmployeeChanged {
   int64  ReportsToId          = 9;
 }
 
-message EmployeeDeleted {
+message EmployeeDeletedProtoEvent {
   int64 EmployeeId = 1;
 }
 
-message DepartmentChanged {
+message DepartmentChangedProtoEvent {
   int64  DepartmentId       = 1;
   int64  CompanyId          = 2;
   string Name               = 3;
@@ -59,6 +59,6 @@ message DepartmentChanged {
   int64  ParentDepartmentId = 5;
 }
 
-message DepartmentDeleted {
+message DepartmentDeletedProtoEvent {
   int64 DepartmentId = 1;
 }

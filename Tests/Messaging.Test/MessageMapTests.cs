@@ -1,6 +1,7 @@
 namespace Fossa.Messaging.Test;
 
 using System.Collections.Generic;
+using Fossa.Messaging.Messages.Events;
 
 public class MessageMapTests
 {
@@ -10,7 +11,7 @@ public class MessageMapTests
     {
         // Arrange
         MessageMap messageMap = new();
-        var expectedType = typeof(CompanyChanged);
+        var expectedType = typeof(CompanyChangedProtoEvent);
         const int messageId = 64169988;
 
         // Act
@@ -36,7 +37,7 @@ public class MessageMapTests
     {
         // Arrange
         MessageMap messageMap = new();
-        var messageType = typeof(CompanyChanged);
+        var messageType = typeof(CompanyChangedProtoEvent);
         const int expectedId = 64169988;
 
         // Act
@@ -58,14 +59,14 @@ public class MessageMapTests
     }
 
     [Theory]
-    [InlineData(typeof(CompanyChanged), 64169988)]
-    [InlineData(typeof(CompanyDeleted), 64169993)]
-    [InlineData(typeof(EmployeeChanged), 64171400)]
-    [InlineData(typeof(EmployeeDeleted), 64171404)]
-    [InlineData(typeof(BranchChanged), 64171407)]
-    [InlineData(typeof(BranchDeleted), 64171411)]
-    [InlineData(typeof(DepartmentChanged), 64171414)]
-    [InlineData(typeof(DepartmentDeleted), 64171418)]
+    [InlineData(typeof(CompanyChangedProtoEvent), 64169988)]
+    [InlineData(typeof(CompanyDeletedProtoEvent), 64169993)]
+    [InlineData(typeof(EmployeeChangedProtoEvent), 64171400)]
+    [InlineData(typeof(EmployeeDeletedProtoEvent), 64171404)]
+    [InlineData(typeof(BranchChangedProtoEvent), 64171407)]
+    [InlineData(typeof(BranchDeletedProtoEvent), 64171411)]
+    [InlineData(typeof(DepartmentChangedProtoEvent), 64171414)]
+    [InlineData(typeof(DepartmentDeletedProtoEvent), 64171418)]
     public void RegisterMessageTypes_ShouldRegisterAllTypes(Type messageType, int expectedId)
     {
         // Arrange

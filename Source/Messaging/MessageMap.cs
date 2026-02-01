@@ -1,5 +1,7 @@
 namespace Fossa.Messaging;
 
+using Fossa.Messaging.Messages.Events;
+
 /// <summary>
 /// Provides a mapping between message types and their corresponding integer identifiers for message serialization and
 /// deserialization.
@@ -48,13 +50,13 @@ public class MessageMap
 
     private static void RegisterMessageTypes(ref BiMap<ComparableType, int> messageTypeBiMap)
     {
-        RegisterMessageType<CompanyChanged>(64169988, ref messageTypeBiMap);
-        RegisterMessageType<CompanyDeleted>(64169993, ref messageTypeBiMap);
-        RegisterMessageType<EmployeeChanged>(64171400, ref messageTypeBiMap);
-        RegisterMessageType<EmployeeDeleted>(64171404, ref messageTypeBiMap);
-        RegisterMessageType<BranchChanged>(64171407, ref messageTypeBiMap);
-        RegisterMessageType<BranchDeleted>(64171411, ref messageTypeBiMap);
-        RegisterMessageType<DepartmentChanged>(64171414, ref messageTypeBiMap);
-        RegisterMessageType<DepartmentDeleted>(64171418, ref messageTypeBiMap);
+        RegisterMessageType<CompanyChangedProtoEvent>(64169988, ref messageTypeBiMap);
+        RegisterMessageType<CompanyDeletedProtoEvent>(64169993, ref messageTypeBiMap);
+        RegisterMessageType<EmployeeChangedProtoEvent>(64171400, ref messageTypeBiMap);
+        RegisterMessageType<EmployeeDeletedProtoEvent>(64171404, ref messageTypeBiMap);
+        RegisterMessageType<BranchChangedProtoEvent>(64171407, ref messageTypeBiMap);
+        RegisterMessageType<BranchDeletedProtoEvent>(64171411, ref messageTypeBiMap);
+        RegisterMessageType<DepartmentChangedProtoEvent>(64171414, ref messageTypeBiMap);
+        RegisterMessageType<DepartmentDeletedProtoEvent>(64171418, ref messageTypeBiMap);
     }
 }
