@@ -21,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="schema.proto" GrpcServices="None" />
+    <Protobuf Include="Messages\Events.proto" GrpcServices="None" />
   </ItemGroup>
 </Project>
