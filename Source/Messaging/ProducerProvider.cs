@@ -6,9 +6,6 @@ using Microsoft.Extensions.Options;
 /// <summary>
 /// Provides an <see cref="IProducer{TKey, TValue}"/>.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="ProducerProvider"/> class.
-/// </remarks>
 /// <param name="serviceIdentityProvider">The service identity provider.</param>
 /// <param name="options">The options.</param>
 public class ProducerProvider(

@@ -12,9 +12,6 @@ using Microsoft.Extensions.Options;
 /// <summary>
 /// Publishes messages to a message broker.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="MessagePublisher"/> class.
-/// </remarks>
 /// <param name="serviceIdentityProvider">The service identity provider.</param>
 /// <param name="producerProvider">The producer provider.</param>
 /// <param name="messageMap">The Message Map.</param>
@@ -37,7 +34,12 @@ public class MessagePublisher(
     private readonly TimeProvider timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
 
     /// <inheritdoc/>
-    public async Task<DeliveryResult<string?, byte[]>> PublishAsync(IMessage message, CancellationToken cancellationToken)
+    public async Task<DeliveryResult<string?, byte[]>> PublishAsync(
+        IMessage message,
+        long companyId,
+        string entityName,
+        long entityId,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(message);
 
@@ -49,12 +51,12 @@ public class MessagePublisher(
             Id = Ulid.NewUlid().ToString(),
             DataSchema = null,
             Source = new Uri($"/fossa/agent/{this.serviceIdentityProvider.GetIdentity()}", UriKind.Relative),
-            Subject = "Entity/123",
+            Subject = $"{entityName}/{entityId}",
             Time = this.timeProvider.GetUtcNow(),
-            Type = this.messageMap.GetMessageTypeID(message.GetType()).ToString(CultureInfo.InvariantCulture),
+            Type = this.messageMap.GetMessageTypeID(message).ToString(CultureInfo.InvariantCulture),
             DataContentType = "application/cloudevents+protobuf",
         }
-        .SetPartitionKey("Company/123");
+        .SetPartitionKey($"Company/{companyId}");
 
         var kafkaMessage = cloudEvent.ToKafkaMessage(ContentMode.Structured, this.cloudEventFormatter);
 

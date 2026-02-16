@@ -1,6 +1,7 @@
 namespace Fossa.Messaging;
 
 using Fossa.Messaging.Messages.Events;
+using Google.Protobuf;
 
 /// <summary>
 /// Provides a mapping between message types and their corresponding integer identifiers for message serialization and
@@ -44,6 +45,19 @@ public class MessageMap
     public int GetMessageTypeID(Type messageType) =>
         this.messageTypeBiMap.Find(messageType)
             .IfNone(() => throw new KeyNotFoundException($"Message type ID not found for type {messageType.FullName}"));
+
+    /// <summary>
+    /// Retrieves the unique identifier associated with the specified message.
+    /// </summary>
+    /// <param name="message">The message for which to obtain the identifier.</param>
+    /// <returns>The identifier corresponding to the specified message type.</returns>
+    /// <exception cref="KeyNotFoundException">Thrown if the specified message type does not have an associated identifier.</exception>
+    public int GetMessageTypeID(IMessage message)
+    {
+        ArgumentNullException.ThrowIfNull(message);
+
+        return this.GetMessageTypeID(message.GetType());
+    }
 
     private static void RegisterMessageType<TKey>(int value, ref BiMap<ComparableType, int> messageTypeBiMap) =>
         messageTypeBiMap = messageTypeBiMap.Add(typeof(TKey), value);
