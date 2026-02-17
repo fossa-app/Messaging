@@ -5,9 +5,9 @@ package Fossa.Messaging.Messages.Events;
 option csharp_namespace = "Fossa.Messaging.Messages.Events";
 
 message CompanyChangedProtoEvent {
-  int64  CompanyId    = 1;
-  string Name         = 2;
-  string CountryCodes = 3;
+  int64  CompanyId   = 1;
+  string Name        = 2;
+  string CountryCode = 3;
 }
 
 message CompanyDeletedProtoEvent {
