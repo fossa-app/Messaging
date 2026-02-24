@@ -59,7 +59,7 @@ public class MessagePublisherTests
 
         // Act
 
-        var deliveryResult = await messagePublisher.PublishAsync(message, message.CompanyId, "Company", message.CompanyId, default).ConfigureAwait(true);
+        var deliveryResult = await messagePublisher.PublishAsync(message, message.CompanyId, "Company", message.CompanyId, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Assert
 
