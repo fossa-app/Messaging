@@ -49,6 +49,7 @@ Task("Test")
                     Blame = true,
                     Collectors = new string[] { "Code Coverage", "XPlat Code Coverage" },
                     Configuration = configuration,
+                    Filter = !BuildSystem.IsLocalBuild ? "Category!=Integration" : null,
                     Loggers = new string[]
                     {
                         $"trx;LogFileName={project.GetFilenameWithoutExtension()}.trx",
