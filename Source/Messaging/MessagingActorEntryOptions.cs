@@ -6,9 +6,9 @@ namespace Fossa.Messaging;
 public class MessagingActorEntryOptions
 {
     /// <summary>
-    /// Gets or sets the name.
+    /// Gets or sets the key.
     /// </summary>
-    public string? Name { get; set; }
+    public string? Key { get; set; }
 
     /// <summary>
     /// Gets or sets the plain text value.

@@ -45,7 +45,7 @@ public class ProducerProvider(
                     var messagingActorEntryOptions = this.options.Value.Actor ?? [];
                     var messagingActorOptions = messagingActorEntryOptions
                             .ToDictionary(
-                        k => k?.Name ?? throw new InvalidOperationException("One of the Message Actor Entry Options Name is not provided."),
+                        k => k?.Key ?? throw new InvalidOperationException("One of the Message Actor Entry Options Keys is not provided."),
                         ResolveActorEntryValue);
                     var producerConfig = new ProducerConfig(messagingActorOptions)
                     {
@@ -96,11 +96,11 @@ public class ProducerProvider(
         }
         else if (providedValues.Count == 0)
         {
-            throw new InvalidOperationException($"Messaging actor entry '{options.Name}'. One of the value properties must be set.");
+            throw new InvalidOperationException($"Messaging actor entry '{options.Key}'. One of the value properties must be set.");
         }
         else
         {
-            throw new InvalidOperationException($"Messaging actor entry '{options.Name}' has multiple value properties set. Only one of these '{providedValues.Select(x => x.Item1)}' properties should be set.");
+            throw new InvalidOperationException($"Messaging actor entry '{options.Key}' has multiple value properties set. Only one of these '{providedValues.Select(x => x.Item1)}' properties should be set.");
         }
     }
 }
