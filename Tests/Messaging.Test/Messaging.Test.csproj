@@ -2,6 +2,7 @@
 
   <PropertyGroup Label="Build">
     <TargetFramework>net10.0</TargetFramework>
+    <UserSecretsId>ad336f2b-09b8-4c53-96cb-ed9913b583f1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup Label="Project References">

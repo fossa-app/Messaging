@@ -1,7 +1,9 @@
 namespace Fossa.Messaging;
 
+using System.Text;
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
+using static LanguageExt.Prelude;
 
 /// <summary>
 /// Provides an <see cref="IProducer{TKey, TValue}"/>.
@@ -40,7 +42,12 @@ public class ProducerProvider(
 #pragma warning restore CA1508 // Avoid dead conditional code
                 {
                     var serviceIdentity = this.serviceIdentityProvider.GetIdentity();
-                    var producerConfig = new ProducerConfig(this.options.Value.Actor)
+                    var messagingActorEntryOptions = this.options.Value.Actor ?? [];
+                    var messagingActorOptions = messagingActorEntryOptions
+                            .ToDictionary(
+                        k => k?.Name ?? throw new InvalidOperationException("One of the Message Actor Entry Options Name is not provided."),
+                        ResolveActorEntryValue);
+                    var producerConfig = new ProducerConfig(messagingActorOptions)
                     {
                         ClientId = serviceIdentity.ToString(),
                     };
@@ -67,6 +74,33 @@ public class ProducerProvider(
             }
 
             this.disposedValue = true;
+        }
+    }
+
+    private static string ResolveActorEntryValue(MessagingActorEntryOptions? options)
+    {
+        if (options is null)
+        {
+            throw new InvalidOperationException("One of the Message Actor Entry Options is null.");
+        }
+
+        var providedValues = Seq(
+            Tuple(nameof(options.PlainTextValue), Optional(options.PlainTextValue)),
+            Tuple(nameof(options.Base64Value), Optional(options.Base64Value)
+                .Map(x => Encoding.UTF8.GetString(Convert.FromBase64String(x)))))
+            .Choose(x => x.Item2.Map(v => Tuple(x.Item1, v)));
+
+        if (providedValues.Count == 1)
+        {
+            return providedValues.Single().Item2;
+        }
+        else if (providedValues.Count == 0)
+        {
+            throw new InvalidOperationException($"Messaging actor entry '{options.Name}'. One of the value properties must be set.");
+        }
+        else
+        {
+            throw new InvalidOperationException($"Messaging actor entry '{options.Name}' has multiple value properties set. Only one of these '{providedValues.Select(x => x.Item1)}' properties should be set.");
         }
     }
 }
