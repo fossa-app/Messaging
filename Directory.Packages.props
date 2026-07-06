@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="CloudNative.CloudEvents.Kafka" Version="3.9.0" />
-    <PackageVersion Include="CloudNative.CloudEvents.Protobuf" Version="2.8.0" />
+    <PackageVersion Include="CloudNative.CloudEvents.Protobuf" Version="2.9.0" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="Grpc.Tools" Version="2.81.1" />
     <PackageVersion Include="IdGen.DependencyInjection" Version="3.0.7" />
