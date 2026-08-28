@@ -46,20 +46,28 @@ Task("Test")
                 project.ToString(),
                 new DotNetTestSettings()
                 {
-                    Blame = true,
-                    Collectors = new string[] { "Code Coverage", "XPlat Code Coverage" },
                     Configuration = configuration,
-                    Filter = !BuildSystem.IsLocalBuild ? "Category!=Integration" : null,
-                    Loggers = new string[]
-                    {
-                        $"trx;LogFileName={project.GetFilenameWithoutExtension()}.trx",
-                        $"html;LogFileName={project.GetFilenameWithoutExtension()}.html",
-                    },
                     NoBuild = true,
                     NoRestore = true,
-                    ResultsDirectory = artefactsDirectory,
-                    ArgumentCustomization = args => args
-                        .Append("--settings Tests/.runsettings"),
+                    ArgumentCustomization = args => 
+                    {
+                        var newArgs = args
+                            .Append("--results-directory").Append(artefactsDirectory.Path.ToString())
+                            .Append("--report-xunit-trx")
+                            .Append("--report-xunit-trx-filename")
+                            .Append($"{project.GetFilenameWithoutExtension()}.trx")
+                            .Append("--coverage")
+                            .Append("--coverage-output-format")
+                            .Append("cobertura")
+                            .Append("--coverage-output")
+                            .Append("coverage.cobertura.xml");
+
+                        if (!BuildSystem.IsLocalBuild)
+                        {
+                            newArgs = newArgs.Append("--filter").Append("Category!=Integration");
+                        }
+                        return newArgs;
+                    }
                 });
         });
 
